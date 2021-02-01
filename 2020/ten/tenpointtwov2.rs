@@ -9,16 +9,14 @@ where P: AsRef<Path>, {
   Ok(io::BufReader::new(file).lines())
 }
 
+// ooh fancy new way of making this simpler
 fn parse(filename: &String) -> Vec<usize> {
-  let mut db: Vec<usize> = Vec::new();
-  if let Ok(lines) = read_lines(filename) {
-    for line in lines {
-      if let Ok(result) = line {
-        db.push(result.parse().unwrap());
-      }
-    }
-  }
-  return db;
+  let db: Vec<usize> = read_lines(filename)
+    .unwrap()
+    .map(|n| n.unwrap().parse().unwrap())
+    .collect();
+  db
+
 }
 
 // this one works on the input and it's fast
@@ -30,9 +28,9 @@ fn check(db: &mut Vec<usize>) -> usize
   db.push(db.last().unwrap()+3); // add final adapter
   let mut total = 1;
   let mut ones = 0;
-  let mut i = 1;
-  while i < db.len() {
-    match db[i]-db[i-1] {
+  // enumerate() gives you a tuple with index & entry, nice
+  db.iter().enumerate().skip(1).for_each(|(i, &entry)| {
+    match entry-db[i-1] {
       // count the number of ones in a row
       1 => ones += 1,
       3 => {
@@ -53,8 +51,7 @@ fn check(db: &mut Vec<usize>) -> usize
       _ => (), 
     }
     //println!("{}",db[i]-db[i-1]);
-    i += 1;
-  }
+  });
   return total;
 }
 
