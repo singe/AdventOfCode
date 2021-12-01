@@ -21,15 +21,17 @@ fn parse(filename: &String) -> Vec<usize> {
 
 fn check(db: &Vec<usize>) 
 {
+  let mut count = 0;
   db.iter().enumerate()
     .for_each(|(i, record)| {
       match i {
         0 => println!("{} (N/A - no previous measurement)",record),
-        _ if record > &db[i-1] => println!("{} (increased)",record),
+        _ if record > &db[i-1] => { println!("{} (increased)",record); count += 1; },
         _ if record < &db[i-1] => println!("{} (decreased)",record),
         _ => (),
       }
     });
+  println!("{} measurements are larger than the previous",count);
 }
 
 fn main() {
