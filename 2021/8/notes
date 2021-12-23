@@ -1,0 +1,80 @@
+  0:      1:      2:      3:      4:
+ aaaa    ....    aaaa    aaaa    ....
+b    c  .    c  .    c  .    c  b    c
+b    c  .    c  .    c  .    c  b    c
+ ....    ....    dddd    dddd    dddd
+e    f  .    f  e    .  .    f  .    f
+e    f  .    f  e    .  .    f  .    f
+ gggg    ....    gggg    gggg    ....
+
+  5:      6:      7:      8:      9:
+ aaaa    aaaa    aaaa    aaaa    aaaa
+b    .  b    .  .    c  b    c  b    c
+b    .  b    .  .    c  b    c  b    c
+ dddd    dddd    ....    dddd    dddd
+.    f  e    f  .    f  e    f  .    f
+.    f  e    f  .    f  e    f  .    f
+ gggg    gggg    ....    gggg    gggg
+
+0 abcefg   6	012 456		18 -
+1 cf       2 *	  2 5		7  *
+2 acdeg    5	0 234 6		15
+3 acdfg    5	0 23 56		16 -
+4 bcdf     4 *	 123 5		11 -
+5 abdfg    5	01 3 56		15
+6 abcefg   6	01 3456		19 -
+7 acf      3 *	0 2  5		7  *
+8 abcdefg  7 *	0123456		21 -
+9 abcdfg   6	0123 56		17 -
+
+acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf
+
+ dddd	0-d
+e    a	1-e
+e    a	2-a
+ ffff	3-f
+g    b	4-g
+g    b	5-b
+ cccc	6-c
+
+acedgfb: 8	0123456
+cdfbe: 5	01 3 56
+gcdfa: 2	0 234 6
+fbcad: 3	0 23 56
+dab: 7		0 2  5
+cefabd: 9	0123 56
+cdfgeb: 6	012 456
+eafb: 4		1 23 5
+cagedb: 0	012 456
+ab: 1		  2  5
+
+cdfeb: 5	01 3 56
+fcadb: 3	0 23 56
+cdfeb: 5	01 3 56
+cdbaf: 3	0 23 56
+
+ab 25
+a=2|5 b=2|5
+
+dab 025
+d - 0		//d not in ab
+
+eafb 1235
+e=1|3 f=1|3
+
+cdfeb 01 3 56
+fcadb 0 23 56
+cdfeb 01 3 56
+cdbaf 0 23 56
+g - 4		//g not in any
+b - 5		//b in all of them, a not (b=2|5)
+a - 2		//a only in 2
+e - 1		//e only in 2 (after a) e=1|3
+f - 3		//f was either 1 or 3   f=1|3
+c - 6		//last letter
+
+
+-------------
+algo
+
+
