@@ -1,13 +1,8 @@
-use std::env;
-use std::fs::File;
-use std::io::{self, BufRead};
+use std::io::BufRead;
 
 fn main() {
-    let filename = env::args().nth(1).expect("Missing file");
-    let file = File::open(&filename).expect("Unable to open file");
-
     let mut biggest: Vec<usize> = Vec::new();
-    io::BufReader::new(file)
+    std::io::stdin().lock()
         .lines()
         .map(|line| match line.expect("Line parse error").parse() {
             Ok(x) => x,
