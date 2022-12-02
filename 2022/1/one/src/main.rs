@@ -2,39 +2,28 @@ use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
 
-fn parse(filename: &String) -> Vec<String> {
-    let mut db = Vec::new();
-
-    let file = File::open(&filename).unwrap();
-    let lines = io::BufReader::new(file).lines();
-
-    for line in lines {
-        let result = line.unwrap();
-        db.push(result);
-    }
-
-    db
-}
-
-fn check(db: Vec<String>)
-{
-    let mut biggest = 0;
-    let mut tally = 0;
-    for record in db {
-        if record.len() == 0 {
-            if tally > biggest {
-                biggest = tally;
-            }
-            tally = 0;
-        } else {
-            tally += record.parse::<usize>().unwrap();
-        }
-    }
-    println!("Total largest calories {biggest}");
-}
-
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let db = parse(&args[1]);
-    check(db);
+    let filename = env::args().nth(1).expect("Missing file");
+    let file = File::open(&filename).expect("Unable to open file");
+
+    let mut biggest = 0;
+    io::BufReader::new(file)
+        .lines()
+        .map(
+            |line| match line.expect("Line parse error").parse() {
+                Ok(x) => x,
+                Err(_) => 0,
+            },
+        )
+        .reduce(|acc, item| {
+            if acc > biggest {
+                biggest = acc;
+            }
+            if item == 0 {
+                0
+            } else {
+                acc + item
+            }
+        });
+    println!("Total largest calories {biggest}");
 }
