@@ -8,21 +8,24 @@ fn main() {
             l.unwrap()
                 .split(' ')
                 .map(|x| match x {
-                    "X" | "A" => 1,
-                    "Y" | "B" => 2,
-                    "Z" | "C" => 3,
+                    "A" => 1,
+                    "B" => 2,
+                    "C" => 3,
+                    "X" => 0,
+                    "Y" => 3,
+                    "Z" => 6,
                     _ => unreachable!(),
                 })
                 .collect::<Vec<usize>>()
         })
         .map(|y| {
-            (match y[1] as isize - y[0] as isize {
-                0 => 3,      //draw
-                1 | -2 => 6, //win
-                2 | -1 => 0, //loss
+            (match y[0] + y[1] {
+                4 | 2 | 9 => 1,
+                7 | 5 | 3 => 2,
+                1 | 8 | 6 => 3,
                 _ => unreachable!(),
             }) + y[1]
         })
         .sum();
-    println!("{score}");
+    println!("{score:?}");
 }
