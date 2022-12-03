@@ -6,17 +6,16 @@ fn main() {
         .lines()
         .map(|line| {
             let line = line.unwrap();
-            let mut res: char = ' ';
-            for c in line[0..line.len() / 2].chars() {
-                if let Some(_) = &line[line.len() / 2..].find(c) {
-                    res = c;
-                    break;
-                }
+            let mut res = 0;
+            let one = &line[0..line.len() / 2];
+            let two = &line[line.len() / 2..];
+            if let Some(i) = two.find(|c| one.contains(c)) {
+                res = two.chars().nth(i).unwrap() as usize;
             }
-            assert!(res != ' ');
+            assert!(res != 0);
             match res {
-                'a'..='z' => (res as usize - 'a' as usize) + 1,
-                'A'..='Z' => (res as usize - 'A' as usize) + 27,
+                97..=122 => (res - 97) + 1,
+                65..=90 => (res - 65) + 27,
                 _ => unreachable!(),
             }
         })
