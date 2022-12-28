@@ -1,0 +1,80 @@
+// This depth first recursive approach was too slow for anything but the sample input so I needed to implement a breadth first search instead
+
+use std::io::BufRead;
+
+fn find_paths(map: &Vec<Vec<usize>>, mut path: Vec<(usize,usize)>, pos: (usize, usize), dest: (usize, usize), answer: &mut Vec<(usize,usize)>) {
+    let x = pos.0;
+    let y = pos.1;
+    if path.len() >= answer.len() || path.contains(&(x,y)) { return; }
+    path.push((x,y));
+    if (x,y) == dest { 
+        println!("FINAL {path:?} length {}",path.len());
+        if path.len() < answer.len() {
+            *answer = path.clone();
+        }
+        return;
+    }
+
+    println!("Got {x},{y} height {}",map[y][x]);
+    println!("{x},{y}: {path:?}");
+    // circular search
+    for (i, j) in [(1, 0), (0, 1), (0, -1), (-1, 0)] {
+        // make sure in bounds
+        let xind = match x as i32 + i {
+            e if e < 0 => 0 as usize,
+            e if e == map[y].len() as i32 => x,
+            e => e as usize,
+        };
+        let yind = match y as i32 + j {
+            e if e < 0 => 0 as usize,
+            e if e == map.len() as i32 => y,
+            e => e as usize,
+        };
+        // check it's not already in our path
+        if path.contains(&(xind,yind)) {
+            continue
+        }
+        println!("  {x},{y}: Checking {xind},{yind} height {}",map[yind][xind]);
+        // check it's only a difference of one in height
+        if map[yind][xind] <= map[y][x] + 1 {
+            println!("    Found");
+            println!("    Recursing {xind},{yind} {path:?}");
+            // recurse if not at dest
+            find_paths(&map, path.clone(), (xind,yind), dest, answer);
+        }
+    }
+}
+
+fn main() {
+    let lines = std::io::stdin().lock().lines().map(|l| l.unwrap());
+    let mut map: Vec<Vec<usize>> = Vec::new();
+    let mut start = (0, 0);
+    let mut dest = (0, 0);
+    for line in lines {
+        map.push(Vec::new());
+        let index = map.len() - 1;
+        for c in line.chars() {
+            match c {
+                'S' => {
+                    map[index].push(0);
+                    start = (map[index].len() - 1, index);
+                }
+                'E' => {
+                    map[index].push(25);
+                    dest = (map[index].len() - 1, index);
+                }
+                _ => map[index].push((c as usize) - ('a' as usize)),
+            }
+        }
+    }
+/*
+    for row in &map {
+        println!("{row:?}");
+    }
+    println!("{start:?} {dest:?}");
+*/
+    let path: Vec<(usize,usize)> = Vec::new();
+    let mut answer: Vec<(usize,usize)> = vec![(0,0);map.len()*map[0].len()];
+    find_paths(&map, path, start, dest, &mut answer);
+    println!("Answer: {}",answer.len()-1);
+}
