@@ -1,0 +1,10 @@
+game_list  = { SOI ~ (game ~ NEWLINE)+ }
+game       = { "Game" ~ number ~ ":" ~ set ~ (";" ~ set)* }
+set        = { color_pair ~ ("," ~ color_pair)* }
+color_pair = { number ~ color }
+
+color  =  { "blue" | "red" | "green" }
+number = @{ ASCII_DIGIT+ }
+
+WHITESPACE = _{ " " }
+NEWLINE = _{ "\n" | "\r\n" }
